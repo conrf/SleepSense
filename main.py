@@ -8,14 +8,6 @@ def main():
     sensor = seeed_dht.DHT("11", 12)
     # for DHT10
     # sensor = seeed_dht.DHT("10")
-    
-    while True:
-        humi, temp = sensor.read()
-        if not humi is None:
-            print('DHT{0}, humidity {1:.1f}%, temperature {2:.1f}*'.format(sensor.dht_type, humi, temp))
-        else:
-            print('DHT{0}, humidity & temperature: {1}'.format(sensor.dht_type, temp))
-        time.sleep(1)
 
      # Simulated sensor data collection functions
     def get_temperature():
@@ -78,10 +70,16 @@ def main():
             print(f"{condition.capitalize()}: {value:.2f}")
 
     # Run the analysis periodically (example: every 5 seconds)
+
     while True:
+        humi, temp = sensor.read()
+        if not humi is None:
+            print('DHT{0}, humidity {1:.1f}%, temperature {2:.1f}*'.format(sensor.dht_type, humi, temp))
+        else:
+            print('DHT{0}, humidity & temperature: {1}'.format(sensor.dht_type, temp))
+
         analyze_environment()
         time.sleep(2)
-
 
 if __name__ == '__main__':
     main()
