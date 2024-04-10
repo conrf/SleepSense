@@ -2,6 +2,15 @@ import random
 import time
 import seeed_dht
 
+# Placeholder Preferences
+user_preferences = {
+        'temperature': 24.0,
+        'humidity': 50.0,
+        'noise_level': 40.0,
+        'light_intensity': 300.0,
+        'air_quality': 50.0
+}
+
 def main():
 
     # for DHT11/DHT22
@@ -24,15 +33,6 @@ def main():
 
     def get_air_quality():
         return random.uniform(0.0, 150.0)  # Simulating air quality index
-
-    # Placeholder for user preferences
-    user_preferences = {
-        'temperature': 24.0,
-        'humidity': 50.0,
-        'noise_level': 40.0,
-        'light_intensity': 300.0,
-        'air_quality': 50.0
-    }
 
     # Simulated User Preferences - could retrieve from website? Web interface?
     def fetch_user_preferences():
