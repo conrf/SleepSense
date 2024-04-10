@@ -17,11 +17,7 @@ def main():
             print('DHT{0}, humidity & temperature: {1}'.format(sensor.dht_type, temp))
         time.sleep(1)
 
-
-if __name__ == '__main__':
-    main()
-
-    # Simulated sensor data collection functions
+     # Simulated sensor data collection functions
     def get_temperature():
         return random.uniform(18.0, 30.0)  # Simulating temperature in Celsius
 
@@ -85,3 +81,7 @@ if __name__ == '__main__':
     while True:
         analyze_environment()
         time.sleep(2)
+
+
+if __name__ == '__main__':
+    main()
