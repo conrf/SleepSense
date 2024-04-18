@@ -44,10 +44,10 @@ def main():
         return humi
 
     def get_noise_level():
-        return {0}.format(soundSensor.analogRead)
+        return soundSensor.analogRead
 
     def get_light_intensity():
-        return {0}.format(lightSensor.analogRead)
+        return lightSensor.analogRead
 
     def get_air_quality():
         return random.uniform(0.0, 150.0)  # Simulating air quality index
