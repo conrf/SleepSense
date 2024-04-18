@@ -7,12 +7,18 @@ from adc import ADC
 
 # Placeholder Preferences
 user_preferences = {
-        'temperature': 68.0,
-        'humidity': 50.0,
-        'noise_level': 40.0,
-        'light_intensity': 200.0,
-        'air_quality': 50.0
+        'temperature': 66.0,
+        'humidity': 40.0,
+        'noise_level': 30.0,
+        'light_intensity': 400.0,
+        'air_quality': 40.0
 }
+
+# Temperature (High/Low Bounds) should be 65-68F https://www.sleepfoundation.org/bedroom-environment/best-temperature-for-sleep
+# Humidity (High/Low Bounds) between 30-50% https://www.sleepfoundation.org/bedroom-environment/humidity-and-sleep#:~:text=The%20best%20relative%20humidity%20for,60%25%20is%20a%20better%20range.
+# Noise (High Bound) Level below <30dB https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5187651/
+# Light (High Bound) intensity less than <100lux https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6814154/
+# Air Quality (High Bound) less than <50 (0-500 AQi) https://www.unep.org/news-and-stories/story/how-air-quality-measured
 
 soundPin = 2
 lightPin = 0
@@ -61,25 +67,37 @@ def main():
 
         status = {}
 
-        if set(current_values.keys() != set(user_preferences.keys())):
+        if set(current_values.keys()) != set(user_preferences.keys()):
             return None
         
         thresholds = {
-            'temperature': (user_preferences['temperature'] - 2, user_preferences['temperature'] + 2),
-            'humidity': (user_preferences['humidity'] - 5, user_preferences['humidity'] + 5),
-            'noise_level': (user_preferences['noise_level'] * 0.9, user_preferences['noise_level'] * 1.1),
-            'light_intensity': (user_preferences['light_intensity'] * 0.8, user_preferences['light_intensity'] * 1.2),
-            'air_quality': (user_preferences['air_quality'] - 10, user_preferences['air_quality'] + 10)
+            # (Low, High)
+            'temperature': (user_preferences['temperature'] - 1, user_preferences['temperature'] + 2), # [GOOD]
+            'humidity': (user_preferences['humidity'] - 10, user_preferences['humidity'] + 10), # [GOOD]
+            'noise_level': (0, user_preferences['noise_level'] + 15),  # [GOOD]
+            'light_intensity': (user_preferences['light_intensity'], 1000), # [GOOD]
+            'air_quality': (0, user_preferences['air_quality'] + 10) # [GOOD]
         }
         
         # Compare current values with user preferences
         for condition, value in current_values.items():
-            if value < thresholds[condition][0]:
-                status[condition] = 'L'
-            elif value > thresholds[condition][1]:
-                status[condition] = 'H'
+            if condition == 'light_intensity':
+                if value < thresholds[condition][0]:
+                    status[condition] = 'H'
+                else:
+                    status[condition] = 'G'  
+            elif condition == 'air_quality':
+                if value < thresholds[condition][1]:
+                    status[condition] = 'G'
+                else:
+                    status[condition] = 'H'           
             else:
-                status[condition] = 'G'
+                if value < thresholds[condition][0]:
+                    status[condition] = 'L'
+                elif value > thresholds[condition][1]:
+                    status[condition] = 'H'
+                else:
+                    status[condition] = 'G'
         
         return status
             
@@ -98,7 +116,7 @@ def main():
             'air_quality': get_air_quality()
         }
         
-        status = compare_values(conditions, user_preferences)
+        status = compare_values(conditions, prefs)
 
         print("Environmental Conditions:")
         for condition, value in status.items():
