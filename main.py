@@ -101,7 +101,6 @@ def main():
         
         return status
             
-
     def analyze_environment():
 
         prefs = fetch_user_preferences()
