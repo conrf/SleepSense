@@ -1,35 +1,53 @@
 import random
 import time
 import seeed_dht
+import math
+from adc import ADC
+
 
 # Placeholder Preferences
 user_preferences = {
-        'temperature': 24.0,
+        'temperature': 68.0,
         'humidity': 50.0,
         'noise_level': 40.0,
-        'light_intensity': 300.0,
+        'light_intensity': 200.0,
         'air_quality': 50.0
 }
 
+soundPin = 2
+lightPin = 0
+
+class AnalogSensor():
+
+    def __init__(self, channel):
+        self.channel = channel
+        self.adc = ADC()
+
+    @property
+    def analogRead(self):
+        value = self.adc.read(self.channel)
+        return value
+    
 def main():
 
-    # for DHT11/DHT22
-    sensor = seeed_dht.DHT("11", 12)
-    # for DHT10
-    # sensor = seeed_dht.DHT("10")
-
-     # Simulated sensor data collection functions
+    soundSensor = AnalogSensor(soundPin)
+    lightSensor = AnalogSensor(lightPin)
+    tempHumidSensor = seeed_dht.DHT("11", 12)
+    
     def get_temperature():
-        return random.uniform(18.0, 30.0)  # Simulating temperature in Celsius
-
+        humi, temp = tempHumidSensor.read()
+        temp_fahrenheit = (temp * 1.8) + 32
+        return temp_fahrenheit
+    
     def get_humidity():
-        return random.uniform(30.0, 70.0)  # Simulating humidity percentage
+        humi, temp = tempHumidSensor.read()
+        return humi
 
     def get_noise_level():
-        return random.uniform(30.0, 80.0)  # Simulating noise level in dB
+        return {0}.format(soundSensor.analogRead)
 
     def get_light_intensity():
-        return random.uniform(100.0, 800.0)  # Simulating light intensity in lux
+        return {0}.format(lightSensor.analogRead)
 
     def get_air_quality():
         return random.uniform(0.0, 150.0)  # Simulating air quality index
@@ -51,18 +69,19 @@ def main():
             'air_quality': get_air_quality()
         }
         
+        
         # Simple analysis (placeholder for proprietary algorithm)
-        conditions_met = sum(1 for k in conditions if abs(conditions[k] - prefs[k]) <= 5)
+        #conditions_met = sum(1 for k in conditions if abs(conditions[k] - prefs[k]) <= 5)
         
         # Provide feedback
         # Display a picture to the LCD
         # Implement Different Pictures?
-        if conditions_met >= 4:
-            print(":-) Conditions are optimal for sleep.")
-        elif conditions_met >= 2:
-            print(":-| Conditions are moderate.")
-        else:
-            print(":-( Conditions are suboptimal for sleep.")
+        # if conditions_met >= 4:
+        #     print(":-) Conditions are optimal for sleep.")
+        # elif conditions_met >= 2:
+        #     print(":-| Conditions are moderate.")
+        # else:
+        #     print(":-( Conditions are suboptimal for sleep.")
         
         # For detailed conditions (simulating LCD output)
         print("Environmental Conditions:")
@@ -72,12 +91,6 @@ def main():
     # Run the analysis periodically (example: every 5 seconds)
 
     while True:
-        humi, temp = sensor.read()
-        if not humi is None:
-            print('DHT{0}, humidity {1:.1f}%, temperature {2:.1f}*'.format(sensor.dht_type, humi, temp))
-        else:
-            print('DHT{0}, humidity & temperature: {1}'.format(sensor.dht_type, temp))
-
         analyze_environment()
         time.sleep(2)
 
