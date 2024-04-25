@@ -156,9 +156,8 @@
   </div>
 
   <script>
-
+    // Function to navigate to the Update Preferences Page
     function navigateToUpdatePreferences() {
-      console.log('Button clicked!');
       window.location.href = '/update_page';
     }
 
@@ -200,15 +199,13 @@
       }
     }
 
-    //
+    // Function to get iconStatus from Python code
     function updateSensorIcons() {
       fetch('/update_sensor_icons')
         .then(response => response.json())
         .then(data => {
           // Check if the data.status is not empty
-          //console.log(data);
           if (Object.keys(data).length > 0) {
-            //console.log('Made it');
             // Iterate through the entries of the iconStatus dictionary
             Object.entries(data).forEach(([sensorId, sensorStatus]) => {
               // Call the helper function with the key and value
@@ -219,30 +216,25 @@
         .catch(error => console.error('Error:', error));
     }
 
-
     // Function to update terminal output based on Flask data
     function updateTerminalOutput(text) {
       fetch('/get_terminal_output')
         .then(response => response.text())
         .then(data => {
           console.log(data);
-          //document.getElementById('terminal-output').innerHTML = data.join('<br>');
           const terminalOutputDiv = document.getElementById('terminal-output');
           const dataArray = data.split(',');
           terminalOutputDiv.innerHTML = dataArray.join('<br>');
           // Auto-scroll to bottom
           terminalOutputDiv.scrollTop = terminalOutputDiv.scrollHeight;
-          //document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
         })
         .catch(error => console.error('Error:', error));
     }
 
+    // Intervals to consistently update the terminal output and icon status
     setInterval(updateTerminalOutput, 2000);
     setInterval(updateSensorIcons, 2000);
 
-
-    // Add WebSocket or AJAX calls here to get updates from Flask and call the above functions
   </script>
 </body>
-
 </html>

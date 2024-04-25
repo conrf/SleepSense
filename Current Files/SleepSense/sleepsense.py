@@ -12,7 +12,7 @@ app = Flask(__name__)
 scriptRunning = False
 # Array to hold output for terminal in HTML
 terminalOutput = []
-# Dictionary to 
+# Dictionary to store icon status
 iconStatus = {}
 
 # Preset preferred metrics based on research
@@ -23,7 +23,6 @@ user_preferences = {
         'light_intensity': 800.0,
         'air_quality': 100.0
 }
-
 
 # Ports for sensors
 soundPin = 2
