@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Update User Preferences</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 90%;
+        margin: 4vh auto 0 auto;
+        padding: 2vw;
+    }
+    .input-group {
+        margin-bottom: 2vh;
+    }
+    .input-group label {
+        display: inline-block;
+        width: 30vw;
+        max-width: 150px;
+    }
+    .input-group input {
+        width: 60vw;
+        max-width: 300px;
+        padding: 1vh;
+    }
+    .btn-back {
+        display: block;
+        position: fixed;
+        top: 1rem; /* Relative positioning */
+        left: 1rem; /* Relative positioning */
+        padding: 1vh 2vw; /* Relative padding */
+        background-color: #ccc;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        color: #000;
+        z-index: 1000;
+    }
+    .btn-back:hover {
+        background-color: #ddd;
+    }
+    button[type="submit"] {
+        padding: 1vh 2vw; /* Relative padding */
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Update User Preferences</h1>
+    <form action="/update_preferences" method="post">
+        <div class="input-group">
+            <label for="temperature">Temperature:</label>
+            <input type="number" id="temperature" name="temperature" value="{{ user_preferences.temperature }}">
+        </div>
+        <div class="input-group">
+            <label for="humidity">Humidity:</label>
+            <input type="number" id="humidity" name="humidity" value="{{ user_preferences.humidity }}">
+        </div>
+        <div class="input-group">
+            <label for="noise">Noise Level:</label>
+            <input type="number" id="noise" name="noise" value="{{ user_preferences.noise_level }}">
+        </div>
+        <div class="input-group">
+            <label for="light">Light Intensity:</label>
+            <input type="number" id="light" name="light" value="{{ user_preferences.light_intensity }}">
+        </div>
+        <div class="input-group">
+            <label for="air">Air Quality:</label>
+            <input type="number" id="air" name="air" value="{{ user_preferences.air_quality }}">
+        </div>
+        
+        <div class="input-group">
+            <button type="submit">Submit</button>
+            
+        </div>
+    </form>
+    <a href="/" class="btn-back">Back</a>
+</div>
+</body>
+</html>
