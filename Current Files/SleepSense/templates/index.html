@@ -1,219 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Sleep Sense Environment Monitor</title>
-<link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  body, html {
-    height: 100%;
-    margin: 0;
-    font-family: 'Ubuntu Mono', monospace;
-    background-image: url('/static/Images/background.webp');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  .floating-box {
-    background-color: #2B3137; /* Dark grey color */
-    border-radius: 16px; /* Rounded corners */
-    width: 630px; /* Set the width of the boxes */
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Soft shadow for depth */
-    margin: 15px 0; /* Spacing between boxes */
-  }
-
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 630px;
-    padding-top: 30px;
-    padding-bottom: 30px;;
-  }
-
-  .logo {
-    background-image: url('/static/Images/logo.webp');
-    height: 69px;
-    width: 150px;
-    margin-left: 20px;
-    background-size: contain;
-    background-repeat: no-repeat;
-  }
-
-  .button-container {
-    display: flex;
-    gap: 20px;
-  }
-
-  .button {
-    height: 90px; 
-    width: 90px; /* Adjusted to accommodate two buttons */
-    border: none;
-    background-size: cover; 
-    background-repeat: no-repeat;
-    cursor: pointer;
-  }
-
-  .start-button {
-    background-color: transparent;
-    background-image: url('/static/Images/button_start_measuring.webp');
-    margin-right: 14px;
-  }
-
-  .stop-button {
-    margin-right: 18px;
-    background-color: transparent;
-    background-image: url('/static/Images/button_stop_measuring.webp'); /* Replace with actual image path */
-  }
-
-  .sensor-icons {
-    display: flex;
-    justify-content: space-around; 
-    height: 90px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-  }
-
-  .sensor-icon {
-    background-size: contain;
-    background-repeat: no-repeat;
-    height: 90px;
-    width: 90px;
-  }
-
-  .terminal {
-    color: white;
-    background-color: #0E0E0E;
-    border: 15px solid #2B3137; /* Slightly lighter grey for border */    padding: 20px;
-    padding: 20px;
-    overflow-y: auto;
-    height: 253px; 
-    width: 602px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-  .update-button {
-    position: absolute;
-    height: 5vh;
-    border-radius: 1vh;
-    top: 2vh; /* Adjust as needed */
-    right: 2vh; /* Adjust as needed */
-  }
-</style>
-</head>
-<body>
-<button class="update-button" onclick="navigateToUpdatePreferences()">Update User Preferences</button>
-<div class="floating-box top-bar">
-  <div class="logo"></div>
-  <div class="button-container">
-    <button class="button start-button" onclick="startMeasuring()"></button>
-    <button class="button stop-button" onclick="stopMeasuring()"></button>
-  </div>
-</div>
-<div class="floating-box sensor-icons">
-  <!-- Sensor icons -->
-  <div class="sensor-icon" id="temperature" style="background-image: url('/static/Images/icon_temperature.webp');"></div>
-  <div class="sensor-icon" id="air_quality" style="background-image: url('/static/Images/icon_air_quality.webp');"></div>
-  <div class="sensor-icon" id="humidity" style="background-image: url('/static/Images/icon_humidity.webp');"></div>
-  <div class="sensor-icon" id="noise_level" style="background-image: url('/static/Images/icon_sound.webp');"></div>
-  <div class="sensor-icon" id="light_intensity" style="background-image: url('/static/Images/icon_brightness.webp');"></div>
-</div>
-<div class="floating-box terminal" id="terminal-output">
-  <!-- Terminal output from Flask will go here -->
-</div>
-
-<script>
-
-function navigateToUpdatePreferences() {
-    console.log('Button clicked!');
-    window.location.href = '/update_page';
-}
-
-
-// JavaScript function to handle the start measuring button click
-function startMeasuring() {
-  fetch('/start_script', { method: 'POST' })
-    .then(response => response.text())
-    .then(data => {
-	console.log(data);
-
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// JavaScript function to handle the stop measuring button click
-function stopMeasuring() {
-  fetch('/stop_script', { method: 'POST' })
-    .then(response => response.text())
-    .then(data => {
-	console.log(data);
-	
-    })
-    .catch(error => console.error('Error:', error));
-
-}
-
-// Function to update sensor icon color based on Flask data
-function updateSensorIconColor(sensorId, status) {
-  const sensorIcon = document.getElementById(sensorId);
-    if (status === 'Good') {
-        sensorIcon.style.filter = 'hue-rotate(0deg)'; // Adjust hue shift for 'Good' status
-    } else if (status === 'High') {
-        sensorIcon.style.filter = 'hue-rotate(220deg)'; // Adjust hue shift for 'High' status
-    } else if (status === 'Low') {
-        sensorIcon.style.filter = 'hue-rotate(53deg)'; // Adjust hue shift for 'Low' status
-    } else if (status === 'High Pollution') {
-        sensorIcon.style.filter = 'hue-rotate(220deg)'; // Adjust hue shift for 'High Pollution' status
+  <meta charset="UTF-8">
+  <title>Sleep Sense Environment Monitor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Ubuntu Mono', monospace;
+      background-image: url('/static/Images/background.webp');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
-}
 
-//
-function updateSensorIcons() {
-  fetch('/update_sensor_icons')
-    .then(response => response.json())
-    .then(data => {
-      // Check if the data.status is not empty
-      //console.log(data);
-      if (Object.keys(data).length > 0) {
-        //console.log('Made it');
-        // Iterate through the entries of the iconStatus dictionary
-        Object.entries(data).forEach(([sensorId, sensorStatus]) => {
-          // Call the helper function with the key and value
-          updateSensorIconColor(sensorId, sensorStatus);
-        });
+    .floating-box {
+      background-color: #2B3137;
+      /* Dark grey color */
+      border-radius: 16px;
+      /* Rounded corners */
+      width: 630px;
+      /* Set the width of the boxes */
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      /* Soft shadow for depth */
+      margin: 15px 0;
+      /* Spacing between boxes */
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 630px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      ;
+    }
+
+    .logo {
+      background-image: url('/static/Images/logo.webp');
+      height: 69px;
+      width: 150px;
+      margin-left: 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .button {
+      height: 90px;
+      width: 90px;
+      /* Adjusted to accommodate two buttons */
+      border: none;
+      background-size: cover;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
+    .start-button {
+      background-color: transparent;
+      background-image: url('/static/Images/button_start_measuring.webp');
+      margin-right: 14px;
+    }
+
+    .stop-button {
+      margin-right: 18px;
+      background-color: transparent;
+      background-image: url('/static/Images/button_stop_measuring.webp');
+      /* Replace with actual image path */
+    }
+
+    .sensor-icons {
+      display: flex;
+      justify-content: space-around;
+      height: 90px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
+
+    .sensor-icon {
+      background-size: contain;
+      background-repeat: no-repeat;
+      height: 90px;
+      width: 90px;
+    }
+
+    .terminal {
+      color: white;
+      background-color: #0E0E0E;
+      border: 15px solid #2B3137;
+      /* Slightly lighter grey for border */
+      padding: 20px;
+      padding: 20px;
+      overflow-y: auto;
+      height: 253px;
+      width: 602px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .update-button {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: transparent;
+      position: absolute;
+      height: 90px;
+      width: 90px;
+      top: 2vh;
+      right: 2vh;
+      border: none;
+      background-size: cover;
+      background-repeat: no-repeat;
+      cursor: pointer;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="floating-box top-bar">
+    <div class="logo"></div>
+    <div class="button-container">
+      <button class="button start-button" onclick="startMeasuring()"></button>
+      <button class="button stop-button" onclick="stopMeasuring()"></button>
+      <button class="button update-button" onclick="navigateToUpdatePreferences()">
+        <img src="/static/Images/settings_button.webp" alt="Update Preferences" style="height: 90px; width: 90px">
+      </button>
+    </div>
+  </div>
+  </div>
+  <div class="floating-box sensor-icons">
+    <!-- Sensor icons -->
+    <div class="sensor-icon" id="temperature" style="background-image: url('/static/Images/icon_temperature.webp');">
+    </div>
+    <div class="sensor-icon" id="air_quality" style="background-image: url('/static/Images/icon_air_quality.webp');">
+    </div>
+    <div class="sensor-icon" id="humidity" style="background-image: url('/static/Images/icon_humidity.webp');"></div>
+    <div class="sensor-icon" id="noise_level" style="background-image: url('/static/Images/icon_sound.webp');"></div>
+    <div class="sensor-icon" id="light_intensity" style="background-image: url('/static/Images/icon_brightness.webp');">
+    </div>
+  </div>
+  <div class="floating-box terminal" id="terminal-output">
+    <!-- Terminal output from Flask will go here -->
+  </div>
+
+  <script>
+
+    function navigateToUpdatePreferences() {
+      console.log('Button clicked!');
+      window.location.href = '/update_page';
+    }
+
+
+    // JavaScript function to handle the start measuring button click
+    function startMeasuring() {
+      fetch('/start_script', { method: 'POST' })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // JavaScript function to handle the stop measuring button click
+    function stopMeasuring() {
+      fetch('/stop_script', { method: 'POST' })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+
+        })
+        .catch(error => console.error('Error:', error));
+
+    }
+
+    // Function to update sensor icon color based on Flask data
+    function updateSensorIconColor(sensorId, status) {
+      const sensorIcon = document.getElementById(sensorId);
+      if (status === 'Good') {
+        sensorIcon.style.filter = 'hue-rotate(0deg)'; // Adjust hue shift for 'Good' status
+      } else if (status === 'High') {
+        sensorIcon.style.filter = 'hue-rotate(220deg)'; // Adjust hue shift for 'High' status
+      } else if (status === 'Low') {
+        sensorIcon.style.filter = 'hue-rotate(53deg)'; // Adjust hue shift for 'Low' status
+      } else if (status === 'High Pollution') {
+        sensorIcon.style.filter = 'hue-rotate(220deg)'; // Adjust hue shift for 'High Pollution' status
       }
-    })
-    .catch(error => console.error('Error:', error));
-}
+    }
+
+    //
+    function updateSensorIcons() {
+      fetch('/update_sensor_icons')
+        .then(response => response.json())
+        .then(data => {
+          // Check if the data.status is not empty
+          //console.log(data);
+          if (Object.keys(data).length > 0) {
+            //console.log('Made it');
+            // Iterate through the entries of the iconStatus dictionary
+            Object.entries(data).forEach(([sensorId, sensorStatus]) => {
+              // Call the helper function with the key and value
+              updateSensorIconColor(sensorId, sensorStatus);
+            });
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
 
-// Function to update terminal output based on Flask data
-function updateTerminalOutput(text) {
-  fetch('/get_terminal_output')
-    .then(response => response.text())
-    .then(data => {
-      console.log(data);
-      //document.getElementById('terminal-output').innerHTML = data.join('<br>');
-      const terminalOutputDiv = document.getElementById('terminal-output');
-      const dataArray = data.split(',');
-      terminalOutputDiv.innerHTML = dataArray.join('<br>');
-      // Auto-scroll to bottom
-      terminalOutputDiv.scrollTop = terminalOutputDiv.scrollHeight;
-      //document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
-    })
-    .catch(error => console.error('Error:', error));
-}
+    // Function to update terminal output based on Flask data
+    function updateTerminalOutput(text) {
+      fetch('/get_terminal_output')
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+          //document.getElementById('terminal-output').innerHTML = data.join('<br>');
+          const terminalOutputDiv = document.getElementById('terminal-output');
+          const dataArray = data.split(',');
+          terminalOutputDiv.innerHTML = dataArray.join('<br>');
+          // Auto-scroll to bottom
+          terminalOutputDiv.scrollTop = terminalOutputDiv.scrollHeight;
+          //document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-setInterval(updateTerminalOutput, 2000);
-setInterval(updateSensorIcons, 2000);
+    setInterval(updateTerminalOutput, 2000);
+    setInterval(updateSensorIcons, 2000);
 
 
-// Add WebSocket or AJAX calls here to get updates from Flask and call the above functions
-</script>
+    // Add WebSocket or AJAX calls here to get updates from Flask and call the above functions
+  </script>
 </body>
+
 </html>
